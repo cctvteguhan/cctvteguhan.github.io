@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Pantauan CCTV Desa Teguhan</title>
+</head>
+<body>
+  <h2>Pantauan CCTV Desa Teguhan</h2>
+  <div id="cctvList">Memuat data...</div>
+
+  <script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxKrUkiF5IFSS_PSvbG_uid_ZduqaQSJ_mivggdfvUTUDwmaLmMOnQ8i14AqvOFTRNE/exec'; // ganti dengan URL Web App kamu
+
+    fetch(API_URL)
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById('cctvList');
+        container.innerHTML = '';
+        data.forEach(item => {
+          const title = document.createElement('p');
+          title.textContent = item.nama;
+
+          const iframe = document.createElement('iframe');
+          iframe.src = item.link;
+          iframe.width = "100%";
+          iframe.height = "315";
+          iframe.allowFullscreen = true;
+          iframe.style.border = "none";
+
+          container.appendChild(title);
+          container.appendChild(iframe);
+          container.appendChild(document.createElement('hr'));
+        });
+      })
+      .catch(err => {
+        document.getElementById('cctvList').innerText = 'Gagal memuat data CCTV.';
+        console.error(err);
+      });
+  </script>
+</body>
+</html>
