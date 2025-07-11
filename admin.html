@@ -2,40 +2,623 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Pantauan CCTV Desa Teguhan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin CCTV</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+     
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #0f172a;
+      color: #e1f5e5;
+    }
+
+
+main {
+  max-width: 960px;
+  margin: 30px auto;
+  padding: 20px;
+  border-radius: 5px;
+  box-sizing: border-box;
+  transition: color var(--transition-speed);
+
+}
+
+form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+input[type="text"] {
+  flex: 1 50px;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  background-color: white;
+  color: #1f3b30;
+  min-width: 0;
+  box-sizing: border-box;
+  height: 50px;
+}
+
+button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  background-color: #10b981;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+  flex-shrink: 0;
+  height: 50px;
+}
+
+button:hover {
+  background-color: #059669;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #1e2f27;
+  overflow-x: auto;
+  display: block;
+  border-radius: 10px;
+}
+
+thead, tbody {
+  width: 100%;
+  display: table;
+  table-layout: fixed;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #2c4e3d;
+  word-wrap: break-word;
+  white-space: normal;
+  border-right: 1px solid #2c4e3d; /* Garis pemisah antar kolom */
+
+}
+th:last-child, td:last-child {
+  border-right: none;
+}
+th {
+  background: linear-gradient(to right, var(--primary-green1), var(--primary-green2));
+  background-size: 600% 600%;
+  animation: animateGradient 20s ease infinite;}
+
+  td{
+    color: #09332b;
+    background-color: white;
+  }
+@media (max-width: 600px) {
+  form {
+    flex-direction: column;
+  }
+
+  input[type="text"],
+  button {
+    width: 100%;
+    height: 50px;
+  }
+
+  table {
+    font-size: 14px;
+  }
+
+  th, td {
+    white-space: nowrap;
+    word-wrap: break-word;
+    white-space: normal;
+  }
+}
+
+th:first-child,
+td:first-child {
+  width: 25px; /* atau sesuaikan: 50px, 100px, dll */
+  white-space: nowrap; /* mencegah teks turun ke bawah */
+  overflow: hidden;
+}
+th:nth-child(4),
+td:nth-child(4) {
+  width: 40px; /* atau sesuaikan, misalnya 60px, 100px */
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+th:nth-child(5),
+td:nth-child(5) {
+  width: 80px; /* atau sesuaikan, misalnya 60px, 100px */
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #2c4e3d;
+      
+    }
+
+    th {
+      background-color: #09332b;
+    }
+
+    .actions svg {
+      cursor: pointer;
+      width: 20px;
+      margin-right: 8px;
+      fill: #10b981;
+    }
+
+    .actions svg:hover {
+      fill: #34d399;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 40px;
+      height: 22px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 22px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: #10b981;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(18px);
+    }
+    .popup {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100vw; height: 100vh;
+        background: rgba(0,0,0,0.6);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 999;
+      }
+      
+      .popup-content {
+        background: #222;
+        color: #fff;
+        padding: 20px;
+        border-radius: 12px;
+        width: 90%;
+        max-width: 320px;
+        text-align: center;
+        animation: fadeIn 0.3s ease;
+      }
+      
+      .popup-actions button {
+        margin: 10px;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      
+      .popup-actions button:first-child {
+        background-color: crimson;
+        color: white;
+      }
+      
+      .popup-actions button:last-child {
+        background-color: gray;
+        color: white;
+      }
+      
+      @keyframes fadeIn {
+        from { opacity: 0; transform: scale(0.95); }
+        to { opacity: 1; transform: scale(1); }
+      }
+      .rtsp-button-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+      }
+      
+      .rtsp-button,
+      .rtsp-box {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        background-color: #10b981;
+        color: #fff;
+        padding: 5px 5px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        height: 50px;
+        min-width: 260px;
+        cursor: pointer;
+      }
+      
+      .rtsp-button:hover,
+      .rtsp-box:hover {
+        background-color: #0e9f6e;
+        transform: translateY(-2px);
+      }
+      
+      .rtsp-button i,
+      .rtsp-box i {
+        font-size: 16px;
+      }
+      .rtsp-button-container
+      {
+        margin-top: 10px;
+      }
+      .ip-box {
+        margin-top: 50px;
+        text-align: center;
+      }
+      
+      #hiddenInput {
+        position: absolute;
+        left: -9999px;
+      }
+      
+      .floating-toggle {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #10b981;
+        border: none;
+        border-radius: 50%;
+        padding: 14px;
+        width: 52px;
+        height: 52px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        cursor: pointer;
+        z-index: 1001;
+        transition: background-color 0.3s, transform 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .floating-toggle:hover {
+        background-color: #0e9f6e;
+        transform: scale(1.05);
+      }
+      
+      .floating-toggle i {
+        font-size: 22px;
+        color: #fff;
+        transition: color 0.3s ease, transform 0.2s ease;
+      }
+      
+      .floating-toggle:hover i {
+        color: #e0fce0;
+        transform: scale(1.1);
+      }
+      
+      .rtsp-section {
+        transition: opacity 0.3s ease, transform 0.3s ease;
+      }
+      
+      .rtsp-section.hidden {
+        opacity: 0;
+        transform: scale(0.95);
+        pointer-events: none;
+        height: 0;
+        overflow: hidden;
+      }
+      :root {
+        --bg-color: #0f172a;
+        --text-color: #e0f2f1;
+        --card-bg: #1e293b;
+        --title-color: #f9f9f9;
+        --primary-green1: #0f1f1b;
+        --primary-green2: #1d8760;
+        --transition-speed: 0.3s;
+      }
+      
+      header {
+        background: linear-gradient(to right, var(--primary-green1), var(--primary-green2));
+        background-size: 600% 600%;
+        animation: animateGradient 20s ease infinite;
+        color: white;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+      }
+      @keyframes animateGradient {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+      
+      header {
+        padding: 16px 20px;
+      }
+      
+      .header-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 100%;
+        margin: 0 auto;
+      }
+      
+      header h1 {
+        flex-grow: 1;
+        margin: 0;
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-align: left;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+      }
+      
+      .logo {
+        width: 40px;
+        height: 40px;
+        margin-right: 15px;
+        border-radius: 50%;
+        object-fit: cover;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        background-color: white;
+      }
+      
+  </style>
 </head>
 <body>
-  <h2>Pantauan CCTV Desa Teguhan</h2>
-  <div id="cctvList">Memuat data...</div>
+  <header>
+    <div class="header-container">
+        <img src="/img/grobogan.png" alt="Logo" class="logo" />
+      <h1>ADMIN CCTV DESA TEGUHAN</h1>
+      
+    </div>
+  </header>
+  <main>
+    <form id="formCCTV">
+      <input type="text" id="nama" placeholder="Nama CCTV" required>
+      <input type="text" id="link" placeholder="Link Embed CCTV" required>
+      <button type="submit">Tambah</button>
+    </form>
 
+    <table>
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>CCTV</th>
+          <th>Link</th>
+          <th>Status</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody id="tabelCCTV">
+      </tbody>
+    </table>
+  </main>
+   
+  <!-- Wrapper RTSP Section -->
+<div id="rtspSection" class="rtsp-section">
+  <div class="ip-box">
+    <div id="rtspBox" class="rtsp-box" title="Klik untuk salin RTSP Link">
+      <i class="fas fa-copy"></i> Salin RTSP Link
+    </div>
+    <input type="text" id="hiddenInput" readonly />
+  </div>
+
+  <div class="rtsp-button-container">
+    <a href="https://rtsp.me/" target="_blank" class="rtsp-button">
+      <i class="fas fa-video"></i> Buat Link RTSP di <strong>rtsp.me</strong>
+    </a>    
+  </div>
+</div>
+
+<!-- Tombol Floating -->
+<button class="floating-toggle" onclick="toggleRTSP()">
+  <i class="fas fa-eye"></i>
+</button>
+
+
+  <div id="popupConfirm" class="popup">
+    <div class="popup-content">
+      <p id="popupMessage">Yakin ingin menghapus CCTV ini?</p>
+      <div class="popup-actions">
+        <button id="btnConfirmHapus">Ya, Hapus</button>
+        <button onclick="closePopup()">Batal</button>
+      </div>
+    </div>
+  </div>
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbxKrUkiF5IFSS_PSvbG_uid_ZduqaQSJ_mivggdfvUTUDwmaLmMOnQ8i14AqvOFTRNE/exec'; // ganti dengan URL Web App kamu
-
-    fetch(API_URL)
-      .then(res => res.json())
-      .then(data => {
-        const container = document.getElementById('cctvList');
-        container.innerHTML = '';
-        data.forEach(item => {
-          const title = document.createElement('p');
-          title.textContent = item.nama;
-
-          const iframe = document.createElement('iframe');
-          iframe.src = item.link;
-          iframe.width = "100%";
-          iframe.height = "315";
-          iframe.allowFullscreen = true;
-          iframe.style.border = "none";
-
-          container.appendChild(title);
-          container.appendChild(iframe);
-          container.appendChild(document.createElement('hr'));
-        });
-      })
-      .catch(err => {
-        document.getElementById('cctvList').innerText = 'Gagal memuat data CCTV.';
-        console.error(err);
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwQUgzh6sI0imXHh8A9nkHm95DDyy89XjbJD1PlPrAjvpgDvRm6E86IEmFIdqQO7pLk/exec';
+  
+    document.addEventListener('DOMContentLoaded', () => {
+      loadData();
+    });
+  
+    document.getElementById('formCCTV').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const nama = document.getElementById('nama').value.trim();
+      const link = document.getElementById('link').value.trim();
+  
+      if (!nama || !link) return alert("Nama dan link harus diisi");
+  
+      await fetch(scriptURL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'tambah', nama, link })
       });
-  </script>
+  
+      document.getElementById('formCCTV').reset();
+      loadData();
+    });
+  
+    async function loadData() {
+      const res = await fetch(scriptURL);
+      const data = await res.json();
+      const tbody = document.getElementById('tabelCCTV');
+      tbody.innerHTML = '';
+  
+      data.forEach((item, i) => {
+        const tr = document.createElement('tr');
+  
+        tr.innerHTML = `
+          <td>${i + 1}</td>
+          <td>
+            <span contenteditable="true" onblur="updateNama(${i}, this.innerText)">${item.nama}</span>
+          </td>
+          <td><a href="${item.link}" target="_blank">${item.link}</a></td>
+          <td>
+            <input type="checkbox" ${item.status === 'aktif' ? 'checked' : ''} onchange="toggleStatus(${i}, this.checked)">
+          </td>
+          <td>
+            <button onclick="showPopup('${item.id}')" style="color:red;">Hapus</button>
+          </td>
+          
+        `;
+  
+        tbody.appendChild(tr);
+      });
+    }
+  
+    async function updateNama(index, newNama) {
+      await fetch(scriptURL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'ubahNama', index, nama: newNama.trim() })
+      });
+      loadData();
+    }
+  
+    async function toggleStatus(index, status) {
+      await fetch(scriptURL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'ubahStatus', index, status: status ? 'aktif' : 'nonaktif' })
+      });
+      loadData();
+    }
+  
+    async function hapusCCTV(id) {
+        if (!confirm("Yakin ingin menghapus CCTV ini?")) return;
+        await fetch(scriptURL, {
+          method: 'POST',
+          body: JSON.stringify({ action: 'hapus', id })
+        });
+        loadData();
+      }
+      let idToDelete = null;
+
+function showPopup(id) {
+  idToDelete = id;
+  document.getElementById('popupConfirm').style.display = 'flex';
+}
+
+function closePopup() {
+  idToDelete = null;
+  document.getElementById('popupConfirm').style.display = 'none';
+}
+
+document.getElementById('btnConfirmHapus').addEventListener('click', async () => {
+  if (!idToDelete) return;
+
+  await fetch(scriptURL, {
+    method: 'POST',
+    body: JSON.stringify({ action: 'hapus', id: idToDelete })
+  });
+
+  closePopup();
+  loadData();
+});
+// Ambil IP publik dari API
+async function tampilkanIPDanSiapCopy() {
+  const box = document.getElementById('rtspBox');
+  const hiddenInput = document.getElementById('hiddenInput');
+
+  try {
+    const res = await fetch("https://api.ipify.org?format=json");
+    const data = await res.json();
+    const ip = data.ip;
+    const rtspLink = `rtsp://username:password@${ip}:554/`;
+
+    hiddenInput.value = rtspLink;
+
+    box.onclick = () => {
+      hiddenInput.select();
+      hiddenInput.setSelectionRange(0, 99999); 
+      document.execCommand("copy");
+
+      box.innerHTML = `<i class="fas fa-check-circle"></i> Disalin!`;
+      setTimeout(() => {
+        box.innerHTML = `<i class="fas fa-copy"></i> Salin RTSP Link`;
+      }, 2000);
+    };
+  } catch (err) {
+    box.innerHTML = `<i class="fas fa-exclamation-circle"></i> Gagal memuat IP`;
+  }
+}
+
+document.addEventListener("DOMContentLoaded", tampilkanIPDanSiapCopy);
+  
+// INI TOMBOL MENGAMBANG
+
+function toggleRTSP() {
+    const section = document.getElementById("rtspSection");
+    section.classList.toggle("hidden");
+
+    const btn = document.querySelector(".floating-toggle i");
+    if (section.classList.contains("hidden")) {
+      btn.classList.remove("fa-eye-slash");
+      btn.classList.add("fa-eye");
+    } else {
+      btn.classList.remove("fa-eye");
+      btn.classList.add("fa-eye-slash");
+    }
+  }
+
+  // Default: RTSP disembunyikan
+  window.onload = () => {
+    document.getElementById("rtspSection").classList.add("hidden");
+  }
+</script>
+
 </body>
 </html>
