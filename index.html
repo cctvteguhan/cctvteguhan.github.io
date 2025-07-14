@@ -253,104 +253,81 @@
     &copy; 2025 Pemerintah Desa Teguhan
   </footer>
 
-  <script>
-    const btn = document.getElementById('toggleModeBtn');
-    const iconMoon = document.getElementById('iconMoon');
-    const iconSun = document.getElementById('iconSun');
+ <script>
+  const btn = document.getElementById('toggleModeBtn');
+  const iconMoon = document.getElementById('iconMoon');
+  const iconSun = document.getElementById('iconSun');
 
-    function updateIcon(mode) {
-      if (mode === 'light') {
-        iconMoon.classList.remove('active');
-        iconSun.classList.add('active');
-      } else {
-        iconMoon.classList.add('active');
-        iconSun.classList.remove('active');
-      }
+  function updateIcon(mode) {
+    if (mode === 'light') {
+      iconMoon.classList.remove('active');
+      iconSun.classList.add('active');
+    } else {
+      iconMoon.classList.add('active');
+      iconSun.classList.remove('active');
     }
+  }
 
-    function setMode(mode) {
-      document.body.classList.remove('light', 'dark');
-      document.body.classList.add(mode);
-      localStorage.setItem('mode', mode);
-      updateIcon(mode);
-    }
+  function setMode(mode) {
+    document.body.classList.remove('light', 'dark');
+    document.body.classList.add(mode);
+    localStorage.setItem('mode', mode);
+    updateIcon(mode);
+  }
 
-    const savedMode = localStorage.getItem('mode') || 'dark';
-    setMode(savedMode);
+  const savedMode = localStorage.getItem('mode') || 'dark';
+  setMode(savedMode);
 
-    btn.addEventListener('click', () => {
-      const newMode = document.body.classList.contains('light') ? 'dark' : 'light';
-      setMode(newMode);
-    });
-
-    const API_URL = 'https://script.google.com/macros/s/AKfycbwQUgzh6sI0imXHh8A9nkHm95DDyy89XjbJD1PlPrAjvpgDvRm6E86IEmFIdqQO7pLk/exec';
-
-    fetch(API_URL)
-      .then(res => res.json())
-      .then(data => {
-        const container = document.getElementById('cctvList');
-        container.innerHTML = '';
-
-        data.forEach(item => {
-          const div = document.createElement('div');
-          div.className = 'video-item';
-
-          const title = document.createElement('div');
-          title.className = 'video-title';
-          title.textContent = item.nama;
-
-          const iframeWrapper = document.createElement('div');
-          iframeWrapper.className = 'video-wrapper';
-
-          const iframe = document.createElement('iframe');
-          iframe.src = item.link.trim();
-          iframe.allowFullscreen = true;
-
-          iframeWrapper.appendChild(iframe);
-          div.appendChild(title);
-          div.appendChild(iframeWrapper);
-          container.appendChild(div);
-        });
-      })
-      .catch(err => {
-        console.error(err);
-        document.getElementById('cctvList').textContent = 'Gagal memuat data CCTV.';
-      });
-      fetch(API_URL)
-  .then(res => res.json())
-  .then(data => {
-    const container = document.getElementById('cctvList');
-    container.innerHTML = '';
-
-    data.forEach(item => {
-      const isActive = item.status?.toLowerCase() === 'aktif'; 
-
-      const div = document.createElement('div');
-      div.className = 'video-item';
-      div.style.display = isActive ? 'block' : 'none';
-
-      const title = document.createElement('div');
-      title.className = 'video-title';
-      title.textContent = item.nama;
-
-      const iframeWrapper = document.createElement('div');
-      iframeWrapper.className = 'video-wrapper';
-
-      const iframe = document.createElement('iframe');
-      iframe.src = item.link.trim();
-      iframe.allowFullscreen = true;
-
-      iframeWrapper.appendChild(iframe);
-      div.appendChild(title);
-      div.appendChild(iframeWrapper);
-      container.appendChild(div);
-    });
-  })
-  .catch(err => {
-    console.error(err);
-    document.getElementById('cctvList').textContent = 'Gagal memuat data CCTV.';
+  btn.addEventListener('click', () => {
+    const newMode = document.body.classList.contains('light') ? 'dark' : 'light';
+    setMode(newMode);
   });
 
-  </script>
+  const API_URL = 'https://script.google.com/macros/s/AKfycbwQUgzh6sI0imXHh8A9nkHm95DDyy89XjbJD1PlPrAjvpgDvRm6E86IEmFIdqQO7pLk/exec';
+
+  fetch(API_URL)
+    .then(res => res.json())
+    .then(data => {
+      const container = document.getElementById('cctvList');
+      container.innerHTML = '';
+
+      data.forEach(item => {
+        const isActive = item.status?.toLowerCase() === 'aktif';
+        if (!isActive) return;
+
+        const div = document.createElement('div');
+        div.className = 'video-item';
+
+        const title = document.createElement('div');
+        title.className = 'video-title';
+        title.textContent = item.nama;
+
+        const iframeWrapper = document.createElement('div');
+        iframeWrapper.className = 'video-wrapper';
+
+        const iframe = document.createElement('iframe');
+        
+        // 🔄 Konversi link YouTube "watch?v=" menjadi "embed/"
+        let link = item.link.trim();
+        if (link.includes('youtube.com/watch?v=')) {
+          const videoId = link.split('watch?v=')[1].split('&')[0];
+          link = `https://www.youtube.com/embed/${videoId}`;
+        }
+
+        iframe.src = link;
+        iframe.allowFullscreen = true;
+
+        iframeWrapper.appendChild(iframe);
+        div.appendChild(title);
+        div.appendChild(iframeWrapper);
+        container.appendChild(div);
+      });
+    })
+    .catch(err => {
+      console.error(err);
+      document.getElementById('cctvList').textContent = 'Gagal memuat data CCTV.';
+    });
+</script>
+
 </body>
 </html>

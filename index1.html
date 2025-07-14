@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CCTV Desa Teguhan</title>
+  <style>
+    * {
+        box-sizing: border-box;
+      }
+      
+      :root {
+        --bg-color: #0f172a;
+        --text-color: #e0f2f1;
+        --card-bg: #1e293b;
+        --title-color: #f9f9f9;
+        --primary-green1: #0f1f1b;
+        --primary-green2: #1d8760;
+        --transition-speed: 0.3s;
+      }
+      
+      body.light {
+        --bg-color: #f9f9f9;
+        --text-color: #1a1a1a;
+        --card-bg: #ffffff;
+        --title-color: #065f46;
+        --primary-green1: #065f46;
+        --primary-green2: #1d8760;
+      }
+      
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        transition: background-color var(--transition-speed), color var(--transition-speed);
+        overflow-x: hidden;
+      }
+      
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+      
+      @keyframes animateGradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+      
+      header, footer {
+        background: linear-gradient(to right, var(--primary-green1), var(--primary-green2));
+        background-size: 600% 600%;
+        animation: animateGradient 20s ease infinite;
+        color: white;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+      }
+      
+      header {
+        padding: 16px 20px;
+      }
+      
+      footer {
+        text-align: center;
+        padding: 15px;
+        font-size: 13px;
+        color: white;
+        margin-top: auto;
+        border-top: 2px solid rgba(255, 255, 255, 0.4);
+      }
+      
+      .header-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 100%;
+        margin: 0 auto;
+      }
+      
+      header h1 {
+        flex-grow: 1;
+        margin: 0;
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-align: left;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+      }
+      
+      .logo {
+        width: 40px;
+        height: 40px;
+        margin-right: 15px;
+        border-radius: 50%;
+        object-fit: cover;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        background-color: white;
+      }
+      
+      .toggle-mode {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1.5px solid rgba(255, 255, 255, 0.3);
+        border-radius: 999px;
+        width: 60px;
+        height: 34px;
+        padding: 3px 6px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+        transition: background 0.3s, border 0.3s;
+      }
+      
+      .toggle-mode svg {
+        width: 20px;
+        height: 20px;
+        stroke-width: 1.5;
+        stroke: white;
+        fill: none;
+        opacity: 0;
+        transform: scale(0.8) rotate(-90deg);
+        transition: all 0.4s ease;
+      }
+      
+      .toggle-mode svg.active {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+      }
+      
+      body.light .toggle-mode {
+        background: white;
+        border-color: rgba(0, 0, 0, 0.2);
+      }
+      
+      body.light .toggle-mode svg {
+        stroke: #333;
+      }
+      
+      main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        background-color: var(--bg-color);
+      }
+      
+      .video-list {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 30px 15px;
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 100%;
+        flex: 1;
+      }
+      
+      @media (min-width: 600px) {
+        .video-list {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      
+      @media (min-width: 900px) {
+        .video-list {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+      
+      @media (min-width: 1200px) {
+        .video-list {
+          grid-template-columns: repeat(4, 1fr);
+        }
+      }
+      
+      .video-item {
+        background: var(--card-bg);
+        padding: 10px;
+        height: fit-content;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+        transition: background-color var(--transition-speed), transform 0.2s ease;
+    display: block;
+      }
+      
+      .video-item:hover {
+        transform: translateY(-3px);
+      }
+      
+      .video-title {
+        font-size: 18px;
+        font-weight: bold;
+        color: var(--title-color);
+        margin-bottom: 15px;
+        text-align: left;
+        text-transform: uppercase;
+        transition: color var(--transition-speed);
+      }
+      
+      .video-wrapper {
+        position: relative;
+        padding-bottom: 56.25%;
+        height: 0;
+        overflow: hidden;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      
+      .video-wrapper iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+        border-radius: 10px;
+        display: block;
+      }
+      
+  </style>
+  
+</head>
+<body>
+  <header>
+    <div class="header-container">
+        <img src="/img/grobogan.png" alt="Logo" class="logo" />
+      <h1>CCTV DESA TEGUHAN</h1>
+      <button class="toggle-mode" id="toggleModeBtn" title="Ganti Mode">
+        <svg id="iconMoon" class="active" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+        </svg>
+        <svg id="iconSun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/>
+          <line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="video-list" id="cctvList">Memuat data CCTV...</div>
+
+  <footer>
+    &copy; 2025 Pemerintah Desa Teguhan
+  </footer>
+
+  <script>
+    const btn = document.getElementById('toggleModeBtn');
+    const iconMoon = document.getElementById('iconMoon');
+    const iconSun = document.getElementById('iconSun');
+
+    function updateIcon(mode) {
+      if (mode === 'light') {
+        iconMoon.classList.remove('active');
+        iconSun.classList.add('active');
+      } else {
+        iconMoon.classList.add('active');
+        iconSun.classList.remove('active');
+      }
+    }
+
+    function setMode(mode) {
+      document.body.classList.remove('light', 'dark');
+      document.body.classList.add(mode);
+      localStorage.setItem('mode', mode);
+      updateIcon(mode);
+    }
+
+    const savedMode = localStorage.getItem('mode') || 'dark';
+    setMode(savedMode);
+
+    btn.addEventListener('click', () => {
+      const newMode = document.body.classList.contains('light') ? 'dark' : 'light';
+      setMode(newMode);
+    });
+
+    const API_URL = 'https://script.google.com/macros/s/AKfycbwQUgzh6sI0imXHh8A9nkHm95DDyy89XjbJD1PlPrAjvpgDvRm6E86IEmFIdqQO7pLk/exec';
+
+    fetch(API_URL)
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById('cctvList');
+        container.innerHTML = '';
+
+        data.forEach(item => {
+          const div = document.createElement('div');
+          div.className = 'video-item';
+
+          const title = document.createElement('div');
+          title.className = 'video-title';
+          title.textContent = item.nama;
+
+          const iframeWrapper = document.createElement('div');
+          iframeWrapper.className = 'video-wrapper';
+
+          const iframe = document.createElement('iframe');
+          iframe.src = item.link.trim();
+          iframe.allowFullscreen = true;
+
+          iframeWrapper.appendChild(iframe);
+          div.appendChild(title);
+          div.appendChild(iframeWrapper);
+          container.appendChild(div);
+        });
+      })
+      .catch(err => {
+        console.error(err);
+        document.getElementById('cctvList').textContent = 'Gagal memuat data CCTV.';
+      });
+      fetch(API_URL)
+  .then(res => res.json())
+  .then(data => {
+    const container = document.getElementById('cctvList');
+    container.innerHTML = '';
+
+    data.forEach(item => {
+      const isActive = item.status?.toLowerCase() === 'aktif'; 
+
+      const div = document.createElement('div');
+      div.className = 'video-item';
+      div.style.display = isActive ? 'block' : 'none';
+
+      const title = document.createElement('div');
+      title.className = 'video-title';
+      title.textContent = item.nama;
+
+      const iframeWrapper = document.createElement('div');
+      iframeWrapper.className = 'video-wrapper';
+
+      const iframe = document.createElement('iframe');
+      iframe.src = item.link.trim();
+      iframe.allowFullscreen = true;
+
+      iframeWrapper.appendChild(iframe);
+      div.appendChild(title);
+      div.appendChild(iframeWrapper);
+      container.appendChild(div);
+    });
+  })
+  .catch(err => {
+    console.error(err);
+    document.getElementById('cctvList').textContent = 'Gagal memuat data CCTV.';
+  });
+
+  </script>
+</body>
+</html>
