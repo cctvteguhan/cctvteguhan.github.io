@@ -81,7 +81,7 @@ th, td {
   border-bottom: 1px solid #2c4e3d;
   word-wrap: break-word;
   white-space: normal;
-  border-right: 1px solid #2c4e3d; /* Garis pemisah antar kolom */
+  border-right: 1px solid #2c4e3d; 
 
 }
 th:last-child, td:last-child {
@@ -120,20 +120,20 @@ th {
 
 th:first-child,
 td:first-child {
-  width: 25px; /* atau sesuaikan: 50px, 100px, dll */
-  white-space: nowrap; /* mencegah teks turun ke bawah */
+  width: 25px; 
+  white-space: nowrap; 
   overflow: hidden;
 }
 th:nth-child(4),
 td:nth-child(4) {
-  width: 40px; /* atau sesuaikan, misalnya 60px, 100px */
+  width: 40px; 
   white-space: nowrap;
   overflow: hidden;
 }
 
 th:nth-child(5),
 td:nth-child(5) {
-  width: 80px; /* atau sesuaikan, misalnya 60px, 100px */
+  width: 80px; 
   white-space: nowrap;
   overflow: hidden;
 }
@@ -439,7 +439,7 @@ td:nth-child(5) {
     </table>
   </main>
    
-  <!-- Wrapper RTSP Section -->
+  
 <div id="rtspSection" class="rtsp-section">
   <div class="ip-box">
     <div id="rtspBox" class="rtsp-box" title="Klik untuk salin RTSP Link">
@@ -455,7 +455,7 @@ td:nth-child(5) {
   </div>
 </div>
 
-<!-- Tombol Floating -->
+
 <button class="floating-toggle" onclick="toggleRTSP()">
   <i class="fas fa-eye"></i>
 </button>
@@ -571,7 +571,7 @@ document.getElementById('btnConfirmHapus').addEventListener('click', async () =>
   closePopup();
   loadData();
 });
-// Ambil IP publik dari API
+// MENGAMBIL IP PUBLIK
 async function tampilkanIPDanSiapCopy() {
   const box = document.getElementById('rtspBox');
   const hiddenInput = document.getElementById('hiddenInput');
@@ -617,7 +617,7 @@ function toggleRTSP() {
     }
   }
 
-  // Default: RTSP disembunyikan
+  // RTSP disembunyikan
   window.onload = () => {
     document.getElementById("rtspSection").classList.add("hidden");
   }
