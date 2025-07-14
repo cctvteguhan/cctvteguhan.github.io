@@ -505,8 +505,12 @@ td:nth-child(5) {
         tr.innerHTML = `
           <td>${i + 1}</td>
           <td>
-            <span contenteditable="true" onblur="updateNama(${i}, this.innerText)">${item.nama}</span>
-          </td>
+      <span contenteditable="true" 
+        oninput="this.dataset.edited='true'" 
+        onkeydown="event.stopPropagation();" 
+        onblur="if(this.dataset.edited==='true'){ updateNama(${i}, this.innerText); this.dataset.edited='false'; }">
+        ${item.nama}
+      </span>          </td>
           <td><a href="${item.link}" target="_blank">${item.link}</a></td>
           <td>
             <input type="checkbox" ${item.status === 'aktif' ? 'checked' : ''} onchange="toggleStatus(${i}, this.checked)">
@@ -526,7 +530,6 @@ td:nth-child(5) {
         method: 'POST',
         body: JSON.stringify({ action: 'ubahNama', index, nama: newNama.trim() })
       });
-      loadData();
     }
   
     async function toggleStatus(index, status) {
