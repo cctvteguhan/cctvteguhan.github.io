@@ -306,16 +306,23 @@
         iframeWrapper.className = 'video-wrapper';
 
         const iframe = document.createElement('iframe');
-        
-        // 🔄 Konversi link YouTube "watch?v=" menjadi "embed/"
+
+        // 🔄 Konversi berbagai format link YouTube menjadi embed
         let link = item.link.trim();
         if (link.includes('youtube.com/watch?v=')) {
           const videoId = link.split('watch?v=')[1].split('&')[0];
+          link = `https://www.youtube.com/embed/${videoId}`;
+        } else if (link.includes('youtube.com/live/')) {
+          const videoId = link.split('live/')[1].split('?')[0];
+          link = `https://www.youtube.com/embed/${videoId}`;
+        } else if (link.includes('youtu.be/')) {
+          const videoId = link.split('youtu.be/')[1].split('?')[0];
           link = `https://www.youtube.com/embed/${videoId}`;
         }
 
         iframe.src = link;
         iframe.allowFullscreen = true;
+        iframe.frameBorder = "0";
 
         iframeWrapper.appendChild(iframe);
         div.appendChild(title);
@@ -328,6 +335,7 @@
       document.getElementById('cctvList').textContent = 'Gagal memuat data CCTV.';
     });
 </script>
+
 
 </body>
 </html>
