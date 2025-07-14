@@ -323,11 +323,11 @@
     container.innerHTML = '';
 
     data.forEach(item => {
-      const isActive = item.status?.toLowerCase() === 'aktif'; // Ambil kolom C (misalnya disebut `status`)
+      const isActive = item.status?.toLowerCase() === 'aktif'; 
 
       const div = document.createElement('div');
       div.className = 'video-item';
-      div.style.display = isActive ? 'block' : 'none'; // Tampilkan hanya jika aktif
+      div.style.display = isActive ? 'block' : 'none';
 
       const title = document.createElement('div');
       title.className = 'video-title';
