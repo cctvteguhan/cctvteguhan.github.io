@@ -306,24 +306,28 @@
         iframeWrapper.className = 'video-wrapper';
 
         const iframe = document.createElement('iframe');
+        let link = item.link.trim();
 
-        // 🔄 Konversi link YouTube menjadi embed minimalis
-let link = item.link.trim();
-if (link.includes('youtube.com/watch?v=')) {
-  const videoId = link.split('watch?v=')[1].split('&')[0];
-  link = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&showinfo=0&controls=0&disablekb=1&fs=0`;
-} else if (link.includes('youtube.com/live/')) {
-  const videoId = link.split('/live/')[1].split('?')[0];
-  link = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&showinfo=0&controls=0&disablekb=1&fs=0`;
-} else if (link.includes('youtu.be/')) {
-  const videoId = link.split('youtu.be/')[1].split('?')[0];
-  link = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&showinfo=0&controls=0&disablekb=1&fs=0`;
-}
+        // Konversi link YouTube menjadi embed dengan tampilan bersih
+        let videoId = null;
+        if (link.includes('watch?v=')) {
+          videoId = link.split('watch?v=')[1].split('&')[0];
+        } else if (link.includes('youtu.be/')) {
+          videoId = link.split('youtu.be/')[1].split('?')[0];
+        } else if (link.includes('/live/')) {
+          videoId = link.split('/live/')[1].split('?')[0];
+        }
 
+        if (videoId) {
+          link = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&rel=0&modestbranding=1&showinfo=0&controls=0&disablekb=1&fs=0`;
+        }
 
         iframe.src = link;
+        iframe.allow = "autoplay; encrypted-media";
         iframe.allowFullscreen = true;
         iframe.frameBorder = "0";
+        iframe.style.width = "100%";
+        iframe.style.height = "100%";
 
         iframeWrapper.appendChild(iframe);
         div.appendChild(title);
@@ -336,7 +340,6 @@ if (link.includes('youtube.com/watch?v=')) {
       document.getElementById('cctvList').textContent = 'Gagal memuat data CCTV.';
     });
 </script>
-
 
 </body>
 </html>
