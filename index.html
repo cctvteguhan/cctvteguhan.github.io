@@ -305,50 +305,27 @@
         const iframeWrapper = document.createElement('div');
         iframeWrapper.className = 'video-wrapper';
 
-        let link = item.link.trim();
-        let videoId = null;
-        let originalLink = link;
+        const iframe = document.createElement('iframe');
 
-        if (link.includes('watch?v=')) {
-          videoId = link.split('watch?v=')[1].split('&')[0];
-        } else if (link.includes('youtu.be/')) {
-          videoId = link.split('youtu.be/')[1].split('?')[0];
-        } else if (link.includes('/live/')) {
-          videoId = link.split('/live/')[1].split('?')[0];
-        }
+        // 🔄 Konversi link YouTube menjadi embed minimalis
+let link = item.link.trim();
+if (link.includes('youtube.com/watch?v=')) {
+  const videoId = link.split('watch?v=')[1].split('&')[0];
+  link = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&showinfo=0&controls=0&disablekb=1&fs=0`;
+} else if (link.includes('youtube.com/live/')) {
+  const videoId = link.split('/live/')[1].split('?')[0];
+  link = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&showinfo=0&controls=0&disablekb=1&fs=0`;
+} else if (link.includes('youtu.be/')) {
+  const videoId = link.split('youtu.be/')[1].split('?')[0];
+  link = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&showinfo=0&controls=0&disablekb=1&fs=0`;
+}
 
-        if (videoId) {
-          const embedLink = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&rel=0&modestbranding=1&controls=0&disablekb=1&fs=0`;
 
-          const iframe = document.createElement('iframe');
-          iframe.src = embedLink;
-          iframe.allow = "autoplay; encrypted-media";
-          iframe.allowFullscreen = true;
-          iframe.frameBorder = "0";
-          iframe.style.width = "100%";
-          iframe.style.height = "100%";
+        iframe.src = link;
+        iframe.allowFullscreen = true;
+        iframe.frameBorder = "0";
 
-          // Deteksi jika gagal dimuat (diblokir YouTube)
-          iframe.onerror = () => {
-            iframeWrapper.innerHTML = `
-              <div class="blocked-message">
-                Pemilik video memblokir pemutaran di luar YouTube.
-                <br>
-                <a href="${originalLink}" target="_blank" class="yt-button">Tonton di YouTube</a>
-              </div>
-            `;
-          };
-
-          iframeWrapper.appendChild(iframe);
-        } else {
-          iframeWrapper.innerHTML = `
-            <div class="blocked-message">
-              Link tidak valid.<br>
-              <a href="${originalLink}" target="_blank" class="yt-button">Buka di YouTube</a>
-            </div>
-          `;
-        }
-
+        iframeWrapper.appendChild(iframe);
         div.appendChild(title);
         div.appendChild(iframeWrapper);
         container.appendChild(div);
@@ -359,7 +336,5 @@
       document.getElementById('cctvList').textContent = 'Gagal memuat data CCTV.';
     });
 </script>
-
-
 </body>
 </html>
