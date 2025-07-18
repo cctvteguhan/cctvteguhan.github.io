@@ -305,11 +305,10 @@
         const iframeWrapper = document.createElement('div');
         iframeWrapper.className = 'video-wrapper';
 
-        const iframe = document.createElement('iframe');
         let link = item.link.trim();
-
-        // Konversi link YouTube menjadi embed dengan tampilan bersih
         let videoId = null;
+        let originalLink = link;
+
         if (link.includes('watch?v=')) {
           videoId = link.split('watch?v=')[1].split('&')[0];
         } else if (link.includes('youtu.be/')) {
@@ -319,17 +318,37 @@
         }
 
         if (videoId) {
-          link = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&rel=0&modestbranding=1&showinfo=0&controls=0&disablekb=1&fs=0`;
+          const embedLink = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&rel=0&modestbranding=1&controls=0&disablekb=1&fs=0`;
+
+          const iframe = document.createElement('iframe');
+          iframe.src = embedLink;
+          iframe.allow = "autoplay; encrypted-media";
+          iframe.allowFullscreen = true;
+          iframe.frameBorder = "0";
+          iframe.style.width = "100%";
+          iframe.style.height = "100%";
+
+          // Deteksi jika gagal dimuat (diblokir YouTube)
+          iframe.onerror = () => {
+            iframeWrapper.innerHTML = `
+              <div class="blocked-message">
+                Pemilik video memblokir pemutaran di luar YouTube.
+                <br>
+                <a href="${originalLink}" target="_blank" class="yt-button">Tonton di YouTube</a>
+              </div>
+            `;
+          };
+
+          iframeWrapper.appendChild(iframe);
+        } else {
+          iframeWrapper.innerHTML = `
+            <div class="blocked-message">
+              Link tidak valid.<br>
+              <a href="${originalLink}" target="_blank" class="yt-button">Buka di YouTube</a>
+            </div>
+          `;
         }
 
-        iframe.src = link;
-        iframe.allow = "autoplay; encrypted-media";
-        iframe.allowFullscreen = true;
-        iframe.frameBorder = "0";
-        iframe.style.width = "100%";
-        iframe.style.height = "100%";
-
-        iframeWrapper.appendChild(iframe);
         div.appendChild(title);
         div.appendChild(iframeWrapper);
         container.appendChild(div);
@@ -340,6 +359,7 @@
       document.getElementById('cctvList').textContent = 'Gagal memuat data CCTV.';
     });
 </script>
+
 
 </body>
 </html>
