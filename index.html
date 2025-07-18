@@ -17,6 +17,7 @@
         --primary-green1: #0f1f1b;
         --primary-green2: #1d8760;
         --transition-speed: 0.3s;
+        --overlay-color: rgba(0, 0, 0, 0.7);
       }
       
       body.light {
@@ -26,6 +27,7 @@
         --title-color: #065f46;
         --primary-green1: #065f46;
         --primary-green2: #1d8760;
+        --overlay-color: rgba(255, 255, 255, 0.7);
       }
       
       html, body {
@@ -62,6 +64,8 @@
       
       header {
         padding: 16px 20px;
+        position: relative;
+        z-index: 10;
       }
       
       footer {
@@ -145,14 +149,15 @@
         display: flex;
         flex-direction: column;
         background-color: var(--bg-color);
+        padding-bottom: 20px;
       }
       
       .video-list {
         display: grid;
         grid-template-columns: 1fr;
-        gap: 20px;
+        gap: 25px;
         padding: 30px 15px;
-        max-width: 1200px;
+        max-width: 1400px;
         margin: 0 auto;
         width: 100%;
         flex: 1;
@@ -166,28 +171,31 @@
       
       @media (min-width: 900px) {
         .video-list {
-          grid-template-columns: repeat(3, 1fr);
+          grid-template-columns: repeat(2, 1fr);
         }
       }
       
       @media (min-width: 1200px) {
         .video-list {
-          grid-template-columns: repeat(4, 1fr);
+          grid-template-columns: repeat(2, 1fr);
         }
       }
       
       .video-item {
         background: var(--card-bg);
-        padding: 10px;
+        padding: 15px;
         height: fit-content;
         border-radius: 12px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
-        transition: background-color var(--transition-speed), transform 0.2s ease;
-    display: block;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        transition: all 0.3s ease;
+        display: block;
+        position: relative;
+        overflow: hidden;
       }
       
       .video-item:hover {
-        transform: translateY(-3px);
+        transform: translateY(-5px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
       }
       
       .video-title {
@@ -198,6 +206,20 @@
         text-align: left;
         text-transform: uppercase;
         transition: color var(--transition-speed);
+        letter-spacing: 0.5px;
+        position: relative;
+        padding-bottom: 10px;
+      }
+      
+      .video-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 40px;
+        height: 3px;
+        background: var(--primary-green2);
+        border-radius: 2px;
       }
       
       .video-wrapper {
@@ -207,6 +229,7 @@
         overflow: hidden;
         border-radius: 10px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        background: #000;
       }
       
       .video-wrapper iframe {
@@ -220,6 +243,116 @@
         display: block;
       }
       
+      .thumbnail-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      
+      .thumbnail-container:hover {
+        transform: scale(1.03);
+      }
+      
+      .thumbnail-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      
+      .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--overlay-color);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        text-align: center;
+        padding: 15px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      
+      .thumbnail-container:hover .overlay {
+        opacity: 1;
+      }
+      
+      .overlay-icon {
+        font-size: 40px;
+        margin-bottom: 10px;
+        color: var(--primary-green2);
+      }
+      
+      .overlay-text {
+        font-size: 14px;
+        font-weight: 500;
+        max-width: 90%;
+      }
+      
+      .status-indicator {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #4ade80;
+        box-shadow: 0 0 8px #4ade80;
+        z-index: 2;
+      }
+      
+      .status-indicator.offline {
+        background: #ef4444;
+        box-shadow: 0 0 8px #ef4444;
+      }
+      
+      .loading {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 200px;
+      }
+      
+      .spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid rgba(29, 135, 96, 0.2);
+        border-top: 5px solid var(--primary-green2);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      .no-data {
+        text-align: center;
+        grid-column: 1 / -1;
+        padding: 30px;
+        font-size: 18px;
+        color: var(--text-color);
+      }
+      .video-wrapper img {
+        width: 100%;
+        border-radius: 0px;
+      }
+    
+      .video-thumbnail {
+        object-fit: cover;
+        cursor: pointer;
+      }
   </style>
   
 </head>
@@ -253,88 +386,106 @@
     &copy; 2025 Pemerintah Desa Teguhan
   </footer>
 
- <script>
-  const btn = document.getElementById('toggleModeBtn');
-  const iconMoon = document.getElementById('iconMoon');
-  const iconSun = document.getElementById('iconSun');
-
-  function updateIcon(mode) {
-    if (mode === 'light') {
-      iconMoon.classList.remove('active');
-      iconSun.classList.add('active');
-    } else {
-      iconMoon.classList.add('active');
-      iconSun.classList.remove('active');
+  <script>
+    const btn = document.getElementById('toggleModeBtn');
+    const iconMoon = document.getElementById('iconMoon');
+    const iconSun = document.getElementById('iconSun');
+  
+    function updateIcon(mode) {
+      if (mode === 'light') {
+        iconMoon.classList.remove('active');
+        iconSun.classList.add('active');
+      } else {
+        iconMoon.classList.add('active');
+        iconSun.classList.remove('active');
+      }
     }
-  }
-
-  function setMode(mode) {
-    document.body.classList.remove('light', 'dark');
-    document.body.classList.add(mode);
-    localStorage.setItem('mode', mode);
-    updateIcon(mode);
-  }
-
-  const savedMode = localStorage.getItem('mode') || 'dark';
-  setMode(savedMode);
-
-  btn.addEventListener('click', () => {
-    const newMode = document.body.classList.contains('light') ? 'dark' : 'light';
-    setMode(newMode);
-  });
-
-  const API_URL = 'https://script.google.com/macros/s/AKfycbwQUgzh6sI0imXHh8A9nkHm95DDyy89XjbJD1PlPrAjvpgDvRm6E86IEmFIdqQO7pLk/exec';
-
-  fetch(API_URL)
-    .then(res => res.json())
-    .then(data => {
-      const container = document.getElementById('cctvList');
-      container.innerHTML = '';
-
-      data.forEach(item => {
-        const isActive = item.status?.toLowerCase() === 'aktif';
-        if (!isActive) return;
-
-        const div = document.createElement('div');
-        div.className = 'video-item';
-
-        const title = document.createElement('div');
-        title.className = 'video-title';
-        title.textContent = item.nama;
-
-        const iframeWrapper = document.createElement('div');
-        iframeWrapper.className = 'video-wrapper';
-
-        const iframe = document.createElement('iframe');
-
-        // 🔄 Konversi link YouTube menjadi embed minimalis
-let link = item.link.trim();
-if (link.includes('youtube.com/watch?v=')) {
-  const videoId = link.split('watch?v=')[1].split('&')[0];
-  link = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&showinfo=0&controls=0&disablekb=1&fs=0`;
-} else if (link.includes('youtube.com/live/')) {
-  const videoId = link.split('/live/')[1].split('?')[0];
-  link = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&showinfo=0&controls=0&disablekb=1&fs=0`;
-} else if (link.includes('youtu.be/')) {
-  const videoId = link.split('youtu.be/')[1].split('?')[0];
-  link = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&showinfo=0&controls=0&disablekb=1&fs=0`;
-}
-
-
-        iframe.src = link;
-        iframe.allowFullscreen = true;
-        iframe.frameBorder = "0";
-
-        iframeWrapper.appendChild(iframe);
-        div.appendChild(title);
-        div.appendChild(iframeWrapper);
-        container.appendChild(div);
-      });
-    })
-    .catch(err => {
-      console.error(err);
-      document.getElementById('cctvList').textContent = 'Gagal memuat data CCTV.';
+  
+    function setMode(mode) {
+      document.body.classList.remove('light', 'dark');
+      document.body.classList.add(mode);
+      localStorage.setItem('mode', mode);
+      updateIcon(mode);
+    }
+  
+    const savedMode = localStorage.getItem('mode') || 'dark';
+    setMode(savedMode);
+  
+    btn.addEventListener('click', () => {
+      const newMode = document.body.classList.contains('light') ? 'dark' : 'light';
+      setMode(newMode);
     });
-</script>
+  
+    const API_URL = 'https://script.google.com/macros/s/AKfycbwQUgzh6sI0imXHh8A9nkHm95DDyy89XjbJD1PlPrAjvpgDvRm6E86IEmFIdqQO7pLk/exec';
+  
+    fetch(API_URL)
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById('cctvList');
+        container.innerHTML = '';
+  
+        data.forEach(item => {
+          const isActive = item.status?.toLowerCase() === 'aktif';
+          if (!isActive) return;
+  
+          const div = document.createElement('div');
+          div.className = 'video-item';
+  
+          const title = document.createElement('div');
+          title.className = 'video-title';
+          title.textContent = item.nama;
+  
+          const iframeWrapper = document.createElement('div');
+          iframeWrapper.className = 'video-wrapper';
+  
+          const iframe = document.createElement('iframe');
+  
+          // 🔄 Konversi link YouTube menjadi embed minimalis + ambil videoId
+          let link = item.link.trim();
+          let videoId = '';
+  
+          if (link.includes('youtube.com/watch?v=')) {
+            videoId = link.split('watch?v=')[1].split('&')[0];
+          } else if (link.includes('youtube.com/live/')) {
+            videoId = link.split('/live/')[1].split('?')[0];
+          } else if (link.includes('youtu.be/')) {
+            videoId = link.split('youtu.be/')[1].split('?')[0];
+          }
+  
+          if (videoId) {
+            link = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&showinfo=0&controls=0&disablekb=1&fs=0`;
+          }
+  
+          // ✅ Tambahkan thumbnail image
+          const thumbnail = document.createElement('img');
+          thumbnail.src = `thumbnile.png`;
+          thumbnail.alt = item.nama;
+          thumbnail.className = 'video-thumbnail';
+          thumbnail.style.display = 'block';
+  
+          // ❌ iframe belum langsung ditampilkan
+          iframe.src = link;
+          iframe.allowFullscreen = true;
+          iframe.frameBorder = "0";
+          iframe.style.display = 'none'; // Sembunyikan dulu
+  
+          // Saat thumbnail diklik, ganti dengan iframe
+          thumbnail.addEventListener('click', () => {
+            thumbnail.style.display = 'none';
+            iframe.style.display = 'block';
+          });
+  
+          iframeWrapper.appendChild(thumbnail);
+          iframeWrapper.appendChild(iframe);
+          div.appendChild(title);
+          div.appendChild(iframeWrapper);
+          container.appendChild(div);
+        });
+      })
+      .catch(err => {
+        console.error(err);
+        document.getElementById('cctvList').textContent = 'Gagal memuat data CCTV.';
+      });
+  </script>
 </body>
 </html>
